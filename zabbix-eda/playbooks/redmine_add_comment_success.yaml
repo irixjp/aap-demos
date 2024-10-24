@@ -1,0 +1,30 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    comment: |
+      障害シナリオ{{ scenario_num }}に復旧処理が実施されました。
+      結果は成功です。
+      ---
+      詳細はこちら: https://13.231.242.87/execution/jobs/workflow/{{ awx_workflow_job_id }}/output
+      このチケットは自動クローズされます。
+  tasks:
+  - uri:
+      url: "{{ redmine_server_url + 'issues/' }}{{ ticket_id | string }}.json"
+      method: PUT
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ redmine_api_key }}"
+      body_format: json
+      body:
+        issue:
+          notes: "{{ comment }}"
+      return_content: yes
+      status_code:
+      - 200
+      - 204
+      timeout: "5"
+    register: redmine_issue_search_result
+
+  - debug: var=redmine_issue_search_result
+
+  - debug: var=vars

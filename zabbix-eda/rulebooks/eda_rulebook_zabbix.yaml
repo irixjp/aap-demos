@@ -1,0 +1,58 @@
+---
+- name: Listen for webhook 8111 from Zabbix
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 8111
+  rules:
+    - name: Trigger action of scenario 1
+      condition: >-
+        event.payload.host_host == 'zabbix-agent-01'
+        and event.payload.trigger_name == 'monitoring1_trigger1'
+      actions:
+        - run_workflow_template:
+            name: zabbix_eda_auto_response
+            organization: Default
+            job_args:
+              extra_vars:
+                z_host_name: "{{ event.payload.host_host }}"
+                z_host_id: "{{ event.payload.host_id }}"
+                z_event_id: "{{ event.payload.event_id }}"
+                z_event_severity: "{{ event.payload.event_severity }}"
+                z_trigger_name: "{{ event.payload.trigger_name }}"
+                scenario_num: 1
+
+    - name: Trigger action of scenario 2
+      condition: >-
+        event.payload.host_host == 'zabbix-agent-01'
+        and event.payload.trigger_name == 'monitoring2_trigger2'
+      actions:
+        - run_workflow_template:
+            name: zabbix_eda_auto_response
+            organization: Default
+            job_args:
+              extra_vars:
+                z_host_name: "{{ event.payload.host_host }}"
+                z_host_id: "{{ event.payload.host_id }}"
+                z_event_id: "{{ event.payload.event_id }}"
+                z_event_severity: "{{ event.payload.event_severity }}"
+                z_trigger_name: "{{ event.payload.trigger_name }}"
+                scenario_num: 2
+
+    - name: Trigger action of scenario 3
+      condition: >-
+        event.payload.host_host == 'zabbix-agent-01'
+        and event.payload.trigger_name == 'monitoring3_trigger3'
+      actions:
+        - run_workflow_template:
+            name: zabbix_eda_auto_response
+            organization: Default
+            job_args:
+              extra_vars:
+                z_host_name: "{{ event.payload.host_host }}"
+                z_host_id: "{{ event.payload.host_id }}"
+                z_event_id: "{{ event.payload.event_id }}"
+                z_event_severity: "{{ event.payload.event_severity }}"
+                z_trigger_name: "{{ event.payload.trigger_name }}"
+                scenario_num: 3

@@ -1,0 +1,47 @@
+- hosts: all
+  gather_facts: false
+  tasks:
+  - shell: ps -ef | head -20
+    register: ret_ps
+
+  - shell: tail -20 /var/log/messages
+    register: ret_log
+
+  - set_fact:
+      comment: |
+        現在の状態を確認
+        ps -ef
+        <pre>{{ ret_ps.stdout }}</pre>
+        /var/log/messages
+        <pre>{{ ret_log.stdout }}</pre>
+
+  - debug: var=comment
+
+  - uri:
+      url: "{{ redmine_server_url + 'issues/' }}{{ ticket_id | string }}.json"
+      method: PUT
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ redmine_api_key }}"
+      body_format: json
+      body:
+        issue:
+          status_id: 2
+          notes: "{{ comment }}"
+
+      return_content: yes
+      status_code:
+      - 200
+      - 204
+      timeout: "5"
+    delegate_to: localhost
+    register: redmine_issue_search_result
+
+  - debug: var=redmine_issue_search_result
+
+  - debug: var=scenario_num
+
+  - name: Error for scenario branching
+    ansible.builtin.fail:
+      msg: Error for scenario branching
+    when: scenario_num == 2 or scenario_num == 3

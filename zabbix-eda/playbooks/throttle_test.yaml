@@ -1,0 +1,19 @@
+- hosts: all
+  gather_facts: false
+  tasks:
+    - uri:
+        url: "{{ eda_server_address }}"
+        method: POST
+        validate_certs: false
+        headers:
+          Content-Type: application/json
+        body_format: json
+        body:
+          message: "{{ throttle_flag }}"
+        return_content: yes
+        status_code:
+          - 200
+          - 405
+        timeout: "5"
+      loop: "{{ range(1, 6) | list }}"
+      register: result
