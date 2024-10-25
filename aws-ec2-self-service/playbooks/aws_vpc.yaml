@@ -5,7 +5,7 @@
   tasks:
     - name: Create a VPC
       amazon.aws.ec2_vpc_net:
-        name: "{{ VPC_NAME }}"
+        name: "{{ RESOURCE_TAG_ROLE }}-vpc"
         cidr_block: "{{ VPC_CIDR_BLOCK }}"
         dns_hostnames: yes
         dns_support: yes
@@ -71,7 +71,7 @@
 
     - name: Create a security group
       amazon.aws.ec2_group:
-        name: "{{ SEC_GROUP_NAME }}"
+        name: "{{ RESOURCE_TAG_ROLE }}-sg"
         description: "{{ SEC_GROUP_DESC }}"
         vpc_id: "{{ vpc.vpc.id }}"
         purge_rules: yes
@@ -109,7 +109,7 @@
 
     - name: Create a keypair
       amazon.aws.ec2_key:
-        name: "{{ KEYPAIR_NAME }}"
+        name: "{{ RESOURCE_TAG_ROLE }}-keypair"
         region: "{{ REGION }}"
         state: present
       register: keypair
@@ -117,7 +117,7 @@
     - debug: var=keypair
     - ansible.builtin.set_stats:
         data:
-          extv_sg: "{{ sg }}"
+          extv_sg: "{{ keypair }}"
 
     - name: Output private key
       copy:
