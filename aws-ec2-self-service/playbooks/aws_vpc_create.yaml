@@ -1,5 +1,5 @@
 ---
-- name: Setup handson environment
+- name: Setup dev environment
   hosts: all
   gather_facts: no
   tasks:
