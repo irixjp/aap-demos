@@ -119,11 +119,3 @@
         data:
           extv_sg: "{{ keypair }}"
 
-    - name: Output private key
-      copy:
-        content: "{{ keypair.key.private_key }}"
-        dest: "{{ KEYPAIR_PEM_PATH }}"
-        owner: jupyter
-        group: jupyter
-        mode: "0700"
-      when: keypair.key.private_key is defined
