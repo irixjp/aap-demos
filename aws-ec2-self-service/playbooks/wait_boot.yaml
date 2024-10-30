@@ -5,5 +5,7 @@
   tasks:
     - name: waiting instance boot
       ansible.builtin.ping:
-
-    - debug: var=vars
+      register: waiting_boot
+      until: waiting_boot is not failed
+      retries: 30
+      delay: 10
