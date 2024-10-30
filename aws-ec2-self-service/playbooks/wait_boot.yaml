@@ -1,0 +1,9 @@
+---
+- name: waiting boot
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: waiting instance boot
+      ansible.builtin.ping:
+
+    - debug: var=vars
