@@ -1,0 +1,67 @@
+---
+- name: Deploy ec2 instance
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Collect a ami id
+      amazon.aws.ec2_ami_info:
+        filters:
+          "product-code": "{{ AMI_PRODUCT_CODE }}"
+      register: amis
+
+    - debug: var=amis
+
+    - name: Select latest CentOS9 image
+      set_fact:
+        ami: "{{ temp[0] }}"
+      vars:
+        temp: "{{ amis.images | sort(attribute='creation_date', reverse=True) }}"
+
+    - debug: var=ami
+
+    - name: Collect subnet info
+      amazon.aws.ec2_vpc_subnet_info:
+        region: "{{ REGION }}"
+        filters:
+          "tag:role": "{{ RESOURCE_TAG_ROLE }}"
+      register: subnets
+
+    - debug: var=subnets
+
+    - name: Generate header string
+      ansible.builtin.set_fact:
+        header_str: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
+
+    - ansible.builtin.set_stats:
+        data:
+          header_str: "{{ header_str }}"
+
+#    - name: debug
+#      ansible.builtin.set_fact:
+#        header_str: RayHzHBQ
+
+    - debug: var=header_str
+
+    - name: Create instances
+      amazon.aws.ec2_instance:
+        name: "{{ RESOURCE_TAG_ROLE }}-{{ header_str }}"
+        image_id: "{{ ami.image_id }}"
+        vpc_subnet_id: "{{ subnets.subnets[0].id }}"
+        instance_type: "{{ INSTANCE_TYPE }}"
+        security_group: "{{ RESOURCE_TAG_ROLE }}-sg"
+        key_name: "{{ KEYPAIR_NAME }}"
+        volumes:
+          - device_name: /dev/sda1
+            ebs:
+              volume_size: "{{ VOLUME_SIZE }}"
+              delete_on_termination: true
+        tags:
+          role: "{{ RESOURCE_TAG_ROLE }}"
+          automation_group: "{{ RESOURCE_TAG_ROLE }}-target"
+          service_group: "{{ RESOURCE_TAG_ROLE }}-{{ header_str }}"
+          group_header: "{{ header_str }}"
+        region: "{{ REGION }}"
+        wait: true
+      register: ec2
+
+    - debug: var=ec2

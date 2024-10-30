@@ -16,9 +16,6 @@
       register: vpc
 
     - debug: var=vpc
-    - ansible.builtin.set_stats:
-        data:
-          extv_vpc: "{{ vpc }}"
 
     - name: Create a subnet
       amazon.aws.ec2_vpc_subnet:
@@ -32,9 +29,6 @@
       register: subnet
 
     - debug: var=subnet
-    - ansible.builtin.set_stats:
-        data:
-          extv_subnet: "{{ subnet }}"
 
     - name: Connect to the internet gateway
       amazon.aws.ec2_vpc_igw:
@@ -46,9 +40,6 @@
       register: igw
 
     - debug: var=igw
-    - ansible.builtin.set_stats:
-        data:
-          extv_igw: "{{ igw }}"
 
     - name: Create a route table
       amazon.aws.ec2_vpc_route_table:
@@ -65,9 +56,6 @@
       register: route_table
 
     - debug: var=route_table
-    - ansible.builtin.set_stats:
-        data:
-          extv_route_table: "{{ route_table }}"
 
     - name: Create a security group
       amazon.aws.ec2_group:
@@ -103,19 +91,3 @@
       register: sg
 
     - debug: var=sg
-    - ansible.builtin.set_stats:
-        data:
-          extv_sg: "{{ sg }}"
-
-    - name: Create a keypair
-      amazon.aws.ec2_key:
-        name: "{{ RESOURCE_TAG_ROLE }}-keypair"
-        region: "{{ REGION }}"
-        state: present
-      register: keypair
-
-    - debug: var=keypair
-    - ansible.builtin.set_stats:
-        data:
-          extv_sg: "{{ keypair }}"
-

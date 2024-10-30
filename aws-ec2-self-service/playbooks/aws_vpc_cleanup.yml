@@ -4,12 +4,6 @@
   gather_facts: no
   tasks:
 
-    - name: Delete keypair
-      amazon.aws.ec2_key:
-        name: "{{ RESOURCE_TAG_ROLE }}-keypair"
-        region: "{{ REGION }}"
-        state: absent
-
     - name: Collect security groups
       amazon.aws.ec2_group_info:
         region: "{{ REGION }}"
@@ -109,7 +103,7 @@
     - name: Delete VPCs
       amazon.aws.ec2_vpc_net:
         region: "{{ REGION }}"
-        name: "{{ VPC_NAME }}"
+        name: "{{ RESOURCE_TAG_ROLE }}-vpc"
         cidr_block: "{{ VPC_CIDR_BLOCK }}"
         state: absent
       register: vpc_del

@@ -1,0 +1,27 @@
+---
+- name: Delete ec2 instance
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Collect instance info
+      amazon.aws.ec2_instance_info:
+        region: "{{ REGION }}"
+        filters:
+          "tag:group_header": "{{ group_header }}"
+      register: ec2
+
+    - debug: var=ec2.instances
+
+    - name: Retrive instance ids
+      set_fact:
+        delete_ids: "{{ ec2.instances | community.general.json_query(query) }}"
+      vars:
+        query: "[*].instance_id"
+
+    - debug: var=delete_ids
+
+    - name: Delete instances
+      amazon.aws.ec2_instance:
+        state: absent
+        instance_ids: "{{ delete_ids }}"
+      when: delete_ids | length > 0
