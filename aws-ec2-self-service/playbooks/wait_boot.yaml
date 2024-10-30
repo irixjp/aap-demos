@@ -1,6 +1,6 @@
 ---
 - name: waiting boot
-  hosts: all
+  hosts: "tag_group_header_{{ header_str }}"
   gather_facts: false
   tasks:
     - name: waiting instance boot
