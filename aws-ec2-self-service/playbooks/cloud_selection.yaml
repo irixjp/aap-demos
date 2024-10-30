@@ -1,0 +1,9 @@
+---
+- name: AWS or Azure
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Error for Azure
+      ansible.builtin.fail:
+        msg: Error for Azure
+      when: scenario_type == 'Azure'
