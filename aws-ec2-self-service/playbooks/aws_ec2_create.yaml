@@ -5,6 +5,7 @@
   tasks:
     - name: Collect a ami id
       amazon.aws.ec2_ami_info:
+        region: "{{ REGION }}"
         filters:
           "product-code": "{{ AMI_PRODUCT_CODE }}"
       register: amis
