@@ -1,0 +1,38 @@
+- hosts: all
+  vars:
+    issue_subject: 開発環境払い出し通知
+    issue_desc: |
+      開発環境の払い出しが完了しました。
+      以下のURLとパスワードでアクセスしてください。
+      ---
+      {{ jupyter_url }}
+      password: {{ jupyter_password }}
+  tasks:
+  - uri:
+      url: "{{ redmine_server_url + '/issues.json' }}"
+      method: POST
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ redmine_api_key }}"
+      body_format: json
+      body:
+        issue:
+          project_id: "{{ project_id }}"
+          tracker_id: "{{ tracker_id }}"
+          subject: "{{ issue_subject }}"
+          description: "{{ issue_desc }}"
+      return_content: yes
+      status_code:
+      - 200
+      - 201
+      timeout: "5"
+    register: redmine_issue_search_result
+
+  - debug: var=redmine_issue_search_result
+  - debug: var=redmine_issue_search_result.json.issue.id
+
+  - set_stats:
+      data:
+        ticket_id: "{{ redmine_issue_search_result.json.issue.id }}"
+
+  - debug: var=ticket_id

@@ -43,6 +43,7 @@
     - name: Generate password
       ansible.builtin.set_fact:
         jupyter_password: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
+        jupyter_url: "http://{{ inventory_hostname }}:8888"
 
     - debug: var=jupyter_password
     - set_stats:
