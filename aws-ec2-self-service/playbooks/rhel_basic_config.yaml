@@ -1,0 +1,16 @@
+- name: install packages
+  hosts: "tag_group_header_{{ header_str }}"
+  gather_facts: false
+  become: true
+  tasks:
+    - name: configure epel packages
+      ansible.builtin.dnf:
+        name: epel-release
+        state: latest
+
+    - name: install base packages
+      ansible.builtin.dnf:
+        name:
+          - python3-virtualenv
+          - git
+        state: latest
