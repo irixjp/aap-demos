@@ -1,0 +1,90 @@
+- name: install packages
+  hosts: "tag_group_header_{{ header_str }}"
+  gather_facts: false
+  tasks:
+
+    - name: Disable SELinux
+      ansible.builtin.shell: setenforce 0
+      become: true
+      ignore_errors: true
+
+    - name: Create virtual env
+      ansible.builtin.shell: |
+        python -m venv jupyter
+      args:
+        chdir: /home/ec2-user
+        creates: /home/ec2-user/jupyter
+
+    - name: install jupyter lab
+      ansible.builtin.pip:
+        name: jupyterlab
+        virtualenv: /home/ec2-user/jupyter
+
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: https://github.com/irixjp/katacoda-scenarios.git
+        dest: /home/ec2-user/repo
+
+    - name: Copy config files
+      ansible.builtin.copy:
+        src: /home/ec2-user/repo/container/jupyter/assets/.jupyter
+        dest: /home/ec2-user/
+        remote_src: yes
+
+    - name: create working directory for jupyter
+      ansible.builtin.file:
+        path: /jupyter
+        state: directory
+        mode: '0755'
+        owner: ec2-user
+        group: ec2-user
+      become: true
+
+    - name: Generate password
+      ansible.builtin.set_fact:
+        jupyter_password: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
+
+    - debug: var=jupyter_password
+    - set_stats:
+        data:
+          jupyter_password: "{{ jupyter_password }}"
+
+    - name: open port 8888
+      ansible.builtin.firewalld:
+        zone: public
+        port: 8888/tcp
+        permanent: yes
+        state: enabled
+      become: true
+
+    - name: reload firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: reloaded
+      become: true
+
+    - name: create systemd config
+      ansible.builtin.copy:
+        content: |
+          [Unit]
+          Desctiption=Jupyter Lab
+
+          [Service]
+          Type = simple
+          WorkingDirectory = /jupyter
+          Restart = always
+          Environment=PASSWORD={{ jupyter_password }}
+          ExecStart = /home/ec2-user/jupyter/bin/jupyter lab --ip 0.0.0.0 --port 8888 --config /home/ec2-user/.jupyter/jupyter_notebook_config.py
+          User = ec2-user
+          Group = ec2-user
+
+          [Install]
+          WantedBy = multi-user.target
+        dest: /etc/systemd/system/jupyter.service
+      become: true
+
+    - name: restart jupyter
+      ansible.builtin.systemd:
+        name: jupyter
+        state: restarted
+      become: true
