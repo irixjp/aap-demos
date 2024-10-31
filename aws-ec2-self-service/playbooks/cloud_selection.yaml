@@ -8,9 +8,9 @@
       ansible.builtin.set_fact:
         header_str: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
 
-    - name: debug
-      ansible.builtin.set_fact:
-        header_str: RayHzHBQ
+#    - name: debug
+#      ansible.builtin.set_fact:
+#        header_str: RayHzHBQ
 
     - ansible.builtin.set_stats:
         data:
