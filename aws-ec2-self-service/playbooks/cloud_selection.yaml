@@ -3,6 +3,22 @@
   hosts: all
   gather_facts: no
   tasks:
+
+    - name: Generate header string
+      ansible.builtin.set_fact:
+        header_str: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
+
+    - name: debug
+      ansible.builtin.set_fact:
+        header_str: RayHzHBQ
+
+    - ansible.builtin.set_stats:
+        data:
+          header_str: "{{ header_str }}"
+
+    - debug: var=header_str
+
+
     - name: Error for Azure
       ansible.builtin.fail:
         msg: Error for Azure
