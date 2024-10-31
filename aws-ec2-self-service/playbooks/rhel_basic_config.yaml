@@ -11,6 +11,7 @@
     - name: install base packages
       ansible.builtin.dnf:
         name:
-          - python3-virtualenv
+          - firewalld
           - git
+          - python3-pip
         state: latest
