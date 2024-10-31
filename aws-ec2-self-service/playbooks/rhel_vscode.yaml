@@ -1,0 +1,66 @@
+- name: setup VScode
+  hosts: "tag_group_header_{{ header_str }}"
+  gather_facts: false
+  tasks:
+    - when: "'VSCode' in IDE_TYPE"
+      block:
+        - name: Disable SELinux
+          ansible.builtin.shell: setenforce 0
+          ignore_errors: true
+
+        - name: download and install vscode
+          ansible.builtin.shell: |
+            curl -fsSL https://code-server.dev/install.sh | sh
+          args:
+            chdir: /root
+            creates: /usr/lib/code-server/bin/code-server
+
+        - name: open port 8080
+          ansible.builtin.firewalld:
+            zone: public
+            port: 8080/tcp
+            permanent: yes
+            state: enabled
+
+        - name: reload firewalld
+          ansible.builtin.systemd:
+            name: firewalld
+            state: reloaded
+          become: true
+
+        - name: start vscode temporary
+          ansible.builtin.systemd:
+            name: code-server@ec2-user
+            state: started
+            enabled: true
+
+        - name: change listen address
+          ansible.builtin.lineinfile:
+            path: /home/ec2-user/.config/code-server/config.yaml
+            regexp: '^bind-addr:'
+            line: 'bind-addr: 0.0.0.0:8080'
+
+        - name: restart vscode
+          ansible.builtin.systemd:
+            name: code-server@ec2-user
+            state: restarted
+
+        - name: get password
+          ansible.builtin.shell: |
+            cat /home/ec2-user/.config/code-server/config.yaml | grep password: | awk -e '{print $2}'
+          register: vscode_password
+          ignore_errors: true
+
+        - debug: var=vscode_password
+
+        - set_fact:
+            vscode_url: http://{{ inventory_hostname }}:8080/
+            vscode_password: "{{ vscode_password.stdout}}"
+
+        - debug: var=vscode_password
+        - debug: var=vscode_url
+
+        - set_stats:
+            data:
+              vscode_url: "{{ vscode_url }}"
+              vscode_password: "{{ vscode_password }}"

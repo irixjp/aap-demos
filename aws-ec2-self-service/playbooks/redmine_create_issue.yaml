@@ -6,10 +6,18 @@
       開発環境の払い出しが完了しました。
       以下のURLとパスワードでアクセスしてください。
 
+      ### 環境ID: {{ header_str }}
+      {% if 'Jupyter Notebook' in IDE_TYPE %}
       ### Jupyter Lab
-      環境ID: {{ header_str }}
       {{ jupyter_url }}
       password: {{ jupyter_password }}
+      {% endif %}
+
+      {% if 'VSCode' in IDE_TYPE %}
+      ### VSCode
+      {{ vscode_url }}
+      password: {{ vscode_password }}
+      {% endif %}
   tasks:
     - uri:
         url: "{{ redmine_server_url + '/issues.json' }}"

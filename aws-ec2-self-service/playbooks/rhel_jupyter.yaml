@@ -2,7 +2,8 @@
   hosts: "tag_group_header_{{ header_str }}"
   gather_facts: false
   tasks:
-    - block:
+    - when: "'Jupyter Notebook' in IDE_TYPE"
+      block:
         - name: Disable SELinux
           ansible.builtin.shell: setenforce 0
           become: true
