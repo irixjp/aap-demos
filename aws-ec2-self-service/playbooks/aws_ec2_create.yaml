@@ -20,6 +20,11 @@
 
     - debug: var=ami
 
+    # Product IDが変だったのでAMI直指定
+    - set_fact:
+        ami:
+          image_id: ami-074c801439a538a43
+
     - name: Collect subnet info
       amazon.aws.ec2_vpc_subnet_info:
         region: "{{ REGION }}"
