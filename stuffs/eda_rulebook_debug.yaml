@@ -1,0 +1,14 @@
+---
+- name: Event stream rulebook
+  hosts: all
+  sources:
+    - name: basic
+  rules:
+    - name: run job template
+      condition: >-
+        event.payload.message == 'enabled'
+      actions:
+        - run_job_template:
+            name: Demo Job Template
+            organization: Default
+        - debug: "{{ event }}"
