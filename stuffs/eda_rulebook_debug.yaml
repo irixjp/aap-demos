@@ -11,4 +11,6 @@
         - run_job_template:
             name: Demo Job Template
             organization: Default
-        - debug: "{{ event }}"
+        - debug:
+            msg:
+              - "{{ event }}"
