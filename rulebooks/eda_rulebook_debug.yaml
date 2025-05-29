@@ -2,7 +2,7 @@
 - name: Event stream rulebook
   hosts: all
   sources:
-    - name: basic
+    - name: 'basic'
   rules:
     - name: run job template
       condition: >-
