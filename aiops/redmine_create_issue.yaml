@@ -1,0 +1,50 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    issue_subject: サーバー {{ z_target_host }} で障害を検知
+    issue_desc: |
+      対象サーバー {{ z_target_host }}で障害が発生しました。
+      詳細は以下を確認してください
+      ---
+      {{ zabbix_url }}zabbix.php?action=problem.view&hostids%5B0%5D={{ z_host_id }}
+      ---
+      以下がサーバー {{ z_target_host }}の最新エラーログです。
+
+      {{ error_logs }}
+      ---
+      AIによる一次障害解析結果
+
+      {{ ai_answer }}
+
+  tasks:
+  - uri:
+      url: "{{ redmine_server_url + '/issues.json' }}"
+      method: POST
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ redmine_api_key }}"
+      body_format: json
+      body:
+        issue:
+          project_id: "{{ project_id }}"
+          tracker_id: "{{ tracker_id }}"
+          subject: "{{ issue_subject }}"
+          description: "{{ issue_desc }}"
+      return_content: yes
+      status_code:
+      - 200
+      - 201
+      timeout: "5"
+    register: redmine_issue_search_result
+
+  - debug: var=redmine_issue_search_result
+  - debug: var=redmine_issue_search_result.json.issue.id
+
+  - set_fact:
+      ticket_id: "{{ redmine_issue_search_result.json.issue.id }}"
+
+  - set_stats:
+      data:
+        ticket_id: "{{ ticket_id }}"
+
+  - debug: var=ticket_id

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: get error log from journalctl
+      shell: journalctl -p err | tail -100
+      register: ret
+
+    - debug: var=ret
+
+    - name: export error log data to the next job template
+      set_stats:
+        data:
+          error_logs: "{{ ret.stdout }}"
