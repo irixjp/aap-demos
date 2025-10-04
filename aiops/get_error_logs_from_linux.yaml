@@ -12,3 +12,4 @@
       set_stats:
         data:
           error_logs: "{{ ret.stdout }}"
+
