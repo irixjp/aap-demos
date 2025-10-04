@@ -2,16 +2,16 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    vmware_template_name: rhel94-tpl
+    vmware_vm_name: rhel9-vm-1
     vmware_folder_name: sandbox-9npbs
   tasks:
-    - name: Gather a template vm info
+    - name: Gather a VM info
       vmware.vmware_rest.vcenter_vm_info:
         filter_names:
-          - "{{ vmware_template_name }}"
-      register: template_info_result
+          - "{{ vmware_vm_name }}"
+      register: vm_info_result
 
-    - debug: var=template_info_result
+    - debug: var=vm_info_result
 
     - name: Gather a folder info
       vmware.vmware_rest.vcenter_folder_info:
