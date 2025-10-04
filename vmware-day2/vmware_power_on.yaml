@@ -10,7 +10,7 @@
 
     - debug: var=vm_info_result
 
-    - name: Shut down the VM
-      vmware.vmware_rest.vcenter_vm_guest_power:
-        state: shutdown
+    - name: Startup the VM
+      vmware.vmware_rest.vcenter_vm_power:
+        state: start
         vm: '{{ vm_info_result.value[0].vm }}'
