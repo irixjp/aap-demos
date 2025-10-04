@@ -1,12 +1,24 @@
 ---
 - hosts: localhost
   gather_facts: false
+  vars:
+    vmware_template_name: rhel94-tpl
+    vmware_folder_name: Cluster-1
   tasks:
     - name: Gather a template vm info
       vmware.vmware_rest.vcenter_vm_info:
         vcenter_validate_certs: false
         filter_names:
-          - bastion-9npbs
+          - "{{ vmware_template_name }}"
       register: template_info_result
 
     - debug: var=template_info_result
+
+    - name: Gather a folder info
+      vmware.vmware_rest.vcenter_folder_info:
+        vcenter_validate_certs: false
+        filter_names:
+          - "{{ vmware_folder_name }}"
+      register: folder_info_result
+
+    - debug: var=folder_info_result
