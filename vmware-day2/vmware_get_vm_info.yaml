@@ -8,3 +8,5 @@
         filter_names:
           - bastion-9npbs
       register: template_info_result
+
+    - debug: var=template_info_result
