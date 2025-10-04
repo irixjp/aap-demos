@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: false
   vars:
-    vmware_vm_name: rhel9-vm-*
+    vmware_vm_name: rhel9-vm
     vmware_folder_name: sandbox-9npbs
   tasks:
     - name: Gather a VM info
