@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Gather a template vm info
+      vmware.vmware_rest.vcenter_vm_info:
+        vcenter_validate_certs: false
+        filter_names:
+          - bastion-9npbs
+      register: template_info_result
