@@ -1,0 +1,5 @@
+---
+- name: Manage a Virtual Machine
+  hosts: localhost
+  roles:
+    - redhatone.vm_management.vm_management

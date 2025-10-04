@@ -1,0 +1,6 @@
+---
+- name: Update security-related packages on all hosts
+  ansible.builtin.dnf:
+    name: "*"
+    security: true
+    state: latest

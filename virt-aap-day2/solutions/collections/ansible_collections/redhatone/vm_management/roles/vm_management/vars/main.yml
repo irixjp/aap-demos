@@ -1,0 +1,4 @@
+---
+# vars file for vm_management
+OCP_HOST: "{{ lookup('env', 'K8S_AUTH_HOST') | default('OCP_HOST_NOT_FOUND', true) }}"
+OCP_BEARER_TOKEN: "{{ lookup('env', 'K8S_AUTH_API_KEY') | default('OCP_BEARER_NOT_FOUND', true) }}"

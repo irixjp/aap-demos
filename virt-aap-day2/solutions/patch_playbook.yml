@@ -1,0 +1,6 @@
+---
+- name: Patch Virtual Machines
+  hosts: all
+  roles:
+    - redhatone.vm_management.rhsm_subscription
+    - redhatone.vm_management.vm_management

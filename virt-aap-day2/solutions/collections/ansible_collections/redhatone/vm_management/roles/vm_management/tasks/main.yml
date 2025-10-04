@@ -1,0 +1,5 @@
+---
+# tasks file for vm_management
+
+- name: Run the specific vm_management task
+  include_tasks: "{{ task_file }}"

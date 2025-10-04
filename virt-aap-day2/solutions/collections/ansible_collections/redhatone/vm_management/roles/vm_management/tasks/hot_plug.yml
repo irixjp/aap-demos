@@ -1,0 +1,9 @@
+- name: Swap Instance Type to add more Resources
+  redhat.openshift_virtualization.kubevirt_vm:
+    name: "rhel9-vm1"
+    namespace: "{{ vm_namespace }}"
+    state: present
+    run_strategy: Always
+    instancetype:
+      name: "{{ instance_type }}"
+      revisionName: ""

@@ -1,0 +1,23 @@
+---
+- name: Get all VirtualMachines in the namespace
+  redhat.openshift_virtualization.kubevirt_vm_info:
+    namespace: "{{ vm_namespace }}"
+  register: vm_info
+
+- name: Debug the vm_info variable
+  ansible.builtin.debug:
+    var: vm_info
+
+- name: Restart VM using OpenShift API
+  ansible.builtin.uri:
+    url: "{{ OCP_HOST }}/apis/subresources.kubevirt.io/v1/namespaces/{{ vm_namespace }}/virtualmachines/{{ item.metadata.name }}/restart"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ OCP_BEARER_TOKEN }}"
+    validate_certs: false
+    status_code:
+      - 202
+  loop: "{{ vm_info.resources }}"
+  loop_control:
+    label: "{{ item.metadata.name }}"
+  when: item.status.printableStatus != "Stopped"
