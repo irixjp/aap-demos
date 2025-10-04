@@ -3,7 +3,6 @@
   gather_facts: false
   vars:
     vmware_vm_name: rhel9-vm-1
-    vmware_folder_name: sandbox-9npbs
   tasks:
     - name: Gather a VM info
       vmware.vmware_rest.vcenter_vm_info:
@@ -13,10 +12,7 @@
 
     - debug: var=vm_info_result
 
-    - name: Gather a folder info
-      vmware.vmware_rest.vcenter_folder_info:
-        filter_names:
-          - "{{ vmware_folder_name }}"
-      register: folder_info_result
-
-    - debug: var=folder_info_result
+    - name: Shut down the VM
+      vmware.vmware_rest.vcenter_vm_guest_power:
+        state: shutdown
+        vm: '{{ vm_info_result.value[0].vm }}'
