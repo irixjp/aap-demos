@@ -6,21 +6,8 @@
     vmware_folder_name: sandbox-9npbs
   tasks:
 
-    - name: Gather a folder info
-      vmware.vmware_rest.vcenter_folder_info:
-        filter_names:
-          - "{{ vmware_folder_name }}"
-      register: folder_info_result
-
-    - debug: var=folder_info_result
-
-    - name: Start to clone a new VM
-      vmware.vmware_rest.vcenter_vm:
-        placement:
-          folder: "{{ folder_info_result.value.0.folder }}"
-        name: rhsc-demo-1
-        source: "{{ vmware_template_name }}"
-        state: clone
-      register: clone_vm_result
-
-    - debug: var=clone_vm_result
+    - name: Create A New VM From A Template
+      vmware.vmware.deploy_folder_template:
+        datacenter: "SDDC-Datacenter"
+        vm_name: "rhsc2025-demo-1"
+        template_name: "rhel94-tpl"
