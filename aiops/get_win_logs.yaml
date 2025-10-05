@@ -4,7 +4,13 @@
   tasks:
     - name: Get recent Application log events
       ansible.windows.win_shell: |
-        Get-EventLog -LogName System -EntryType Error
+        Get-EventLog -LogName {{ target_log }} -EntryType Error
       register: ret
 
     - debug: var=ret
+
+    - name: export error log data to the next job template
+      set_stats:
+        data:
+          error_source: Windows Eventlog "{{ target_log }}"
+          error_logs: "{{ ret.stdout }}"

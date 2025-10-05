@@ -1,0 +1,43 @@
+---
+- hosts: all
+  gather_facts: false
+  vars:
+    ai_api_key: set_your_api_key_by_extra_vars_on_AAP
+    ai_api_endpoint: https://api.openai.com/v1/chat/completions
+    ai_model: chatgpt-4o-latest
+  tasks:
+    - name: Create prompt
+      set_fact:
+        prompt: |
+          サーバーでエラーが発生し、以下のログが出力されている
+          ログから原因の推定と、調査方法、可能であればエラーへの対処方法を教えて下さい
+          (出力はmarkdown形式でお願いします)
+          
+          {{ error_logs }}
+
+    - debug: msg={{ prompt }}
+    - name: send prompt
+      ansible.builtin.uri:
+        url: "{{ ai_api_endpoint }}"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ ai_api_key }}"
+        body:
+          model: "{{ ai_model }}"
+          messages:
+            - role: user
+              content: "{{ prompt | default('What is the capital of the USA?') }}"
+        body_format: json
+        return_content: true
+        timeout: 300
+      register: ai_ret
+
+    - debug: var=ai_ret
+
+    - set_fact:
+        parsed_ans: "{{ ai_ret.content | from_json }}"
+
+    - set_stats:
+        data:
+          ai_answer: "{{ parsed_ans.choices[0].message.content }}"
