@@ -6,20 +6,13 @@
     vmware_folder_name: sandbox-9npbs
   tasks:
 
-    - name: Gather a folder info
-      vmware.vmware_rest.vcenter_folder_info:
-        filter_names:
-          - "{{ vmware_folder_name }}"
-      register: folder_info_result
-
-    - debug: var=folder_info_result
-
     - name: Start to clone a new VM
       vmware.vmware_rest.vcenter_vm:
         placement:
-          folder: "{{ folder_info_result.value.0.folder }}"
+          folder: group-v42928
+        datastore: datastore-1031
         name: rhsc-demo-1
-        source: "{{ vmware_template_name }}"
+        source: vm-27697
         state: clone
       register: clone_vm_result
 
