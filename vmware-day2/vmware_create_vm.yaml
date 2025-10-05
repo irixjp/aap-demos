@@ -11,3 +11,5 @@
         datacenter: "SDDC-Datacenter"
         vm_name: "rhsc2025-demo-1"
         template_name: "rhel94-tpl"
+        vm_folder: group-v21104
+        template_folder: sandbox-9npbs
