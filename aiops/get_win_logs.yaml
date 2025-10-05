@@ -1,10 +1,10 @@
 - hosts: all
+  vars:
+    target_log: System
   tasks:
     - name: Get recent Application log events
       ansible.windows.win_shell: |
-        Get-WinEvent -LogName Application -MaxEvents 10 | ConvertTo-Json
-      register: application_events_json
+        Get-WinEvent -LogName {{ target_log }} -EntryType Error -Newest 10
+      register: ret
 
-    - name: Display Application log events
-      debug:
-        msg: "{{ application_events_json.stdout | from_json }}"
+    - debug: var=ret
