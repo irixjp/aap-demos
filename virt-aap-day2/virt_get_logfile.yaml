@@ -1,0 +1,11 @@
+---
+- hosts: "vms-aap-day2-{{ target_hostname }}"
+  gather_facts: false
+  tasks:
+
+    - shell: journalctl --since {{ target_log_range }}
+      register: ret
+
+    - debug:
+        msg: "{{ ret.stdout }}"
+
