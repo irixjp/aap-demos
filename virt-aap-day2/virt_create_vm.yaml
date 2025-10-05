@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Get an existing VirtualMachine
+      redhat.openshift_virtualization.kubevirt_vm_info:
+        name: rhel9-vm1
+        namespace: vms-aap-day2
+      register: default_testvm
+
+    - debug: var=default_testvm
