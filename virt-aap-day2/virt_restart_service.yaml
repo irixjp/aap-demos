@@ -7,8 +7,7 @@
         name: "{{ target_service }}"
         state: "{{ target_operation }}"
 
-    - shell: journalctl -u "{{ target_service }}"
+    - shell: systemctl status "{{ target_service }}"
       register: ret
 
     - debug: var=ret
-
