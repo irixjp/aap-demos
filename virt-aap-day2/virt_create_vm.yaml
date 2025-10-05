@@ -24,6 +24,10 @@
         data_volume_templates:
           - metadata:
               name: centos-stream9-coral-gecko-27
+            sourceRef:
+              kind: DataSource
+              name: centos-stream9
+              namespace: openshift-virtualization-os-images
             spec:
               storage:
                 resources:
