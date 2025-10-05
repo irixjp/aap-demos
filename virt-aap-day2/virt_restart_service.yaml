@@ -10,4 +10,5 @@
     - shell: systemctl status "{{ target_service }}"
       register: ret
 
-    - debug: var=ret
+    - debug: msg=ret.stdout
+
