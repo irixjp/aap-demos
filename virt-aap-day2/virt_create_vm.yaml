@@ -10,22 +10,22 @@
 
     - debug: var=default_testvm
 
-- name: Create a VirtualMachine with a DataVolume template
-  redhat.openshift_virtualization.kubevirt_vm:
-    state: present
-    name: testvm-with-dv
-    namespace: rhsc2025-aap
-    labels:
-      app: testvm-with-dv
-    instancetype:
-      name: u1.small
-    preference:
-      name: fedora
-    data_volume_templates:
-      - metadata:
-          name: centos-stream9-coral-gecko-27
-        spec:
-          storage:
-            resources:
-              requests:
-                storage: 30Gi
+    - name: Create a VirtualMachine with a DataVolume template
+      redhat.openshift_virtualization.kubevirt_vm:
+        state: present
+        name: testvm-with-dv
+        namespace: rhsc2025-aap
+        labels:
+          app: testvm-with-dv
+        instancetype:
+          name: u1.small
+        preference:
+          name: fedora
+        data_volume_templates:
+          - metadata:
+              name: centos-stream9-coral-gecko-27
+            spec:
+              storage:
+                resources:
+                  requests:
+                    storage: 30Gi
