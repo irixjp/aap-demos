@@ -1,0 +1,9 @@
+---
+- hosts: "{{ target_hostname }}"
+  gather_facts: false
+  tasks:
+    - name: Restart service
+      systemd:
+        name: "{{ target_service}}"
+        state: "{{ target_operation }}"
+    - shell: journalctl -u "{{ target_service }}"
