@@ -3,7 +3,7 @@
   gather_facts: false
   tasks:
 
-    - shell: journalctl --since {{ target_log_range }}
+    - shell: journalctl --since "{{ target_log_range }}"
       register: ret
 
     - debug:
