@@ -5,7 +5,7 @@
     - name: Get an existing VirtualMachine
       redhat.openshift_virtualization.kubevirt_vm_info:
         name: rhel9-vm1
-        namespace: vms-aap-day2
+        namespace: rhsc2025-aap
       register: default_testvm
 
     - debug: var=default_testvm
@@ -21,11 +21,11 @@
           name: u1.small
         data_volume_templates:
           - metadata:
-              name: rhel9
+              name: centos-stream9
             spec:
               sourceRef:
                 kind: DataSource
-                name: rhel9
+                name: centos-stream9
                 namespace: openshift-virtualization-os-images
               storage:
                 accessModes:
