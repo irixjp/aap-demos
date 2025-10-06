@@ -5,7 +5,7 @@
   tasks:
     - name: Get recent Application log events
       ansible.windows.win_shell: |
-        Get-EventLog -LogName {{ win_target_log }} -EntryType Error | Format-List *
+        Get-EventLog -LogName {{ win_target_log }} -EntryType Error -Newest 10 | Format-List *
       register: ret
 
     - debug: var=ret
