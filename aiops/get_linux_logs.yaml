@@ -1,9 +1,11 @@
 ---
-- hosts: all
+- hosts: "{{ target_node }}"
   gather_facts: false
+  vars:
+    linux_target_log: journalctl -p err -n 10
   tasks:
     - name: get error log from journalctl
-      shell: journalctl -p err | tail -100
+      shell: "{{ linux_target_log }}"
       register: ret
 
     - debug: var=ret
@@ -11,6 +13,5 @@
     - name: export error log data to the next job template
       set_stats:
         data:
-          error_source: RHEL jounalctl error log
+          error_source: RHEL {{ linux_target_log }}
           error_logs: "{{ ret.stdout }}"
-
