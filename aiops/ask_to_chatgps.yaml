@@ -8,11 +8,11 @@
   tasks:
     - name: Create prompt
       set_fact:
-        prompt: |
-          サーバーでエラーが発生し、以下のログが出力されている
+        gpt_prompt: |
+          これは {{ error_source }} です。
           ログから原因の推定と、調査方法、可能であればエラーへの対処方法を教えて下さい
-          (出力はmarkdown形式でお願いします)
-          
+          (markdown形式で出力)
+
           {{ error_logs }}
 
     - debug: msg={{ prompt }}
@@ -22,12 +22,12 @@
         method: POST
         headers:
           Content-Type: "application/json"
-          Authorization: "Bearer {{ ai_api_key }}"
+          Authorization: "Bearer {{ lookup('env', 'gpt_token') }}"
         body:
           model: "{{ ai_model }}"
           messages:
             - role: user
-              content: "{{ prompt | default('What is the capital of the USA?') }}"
+              content: "{{ gpt_prompt }}"
         body_format: json
         return_content: true
         timeout: 300
