@@ -5,7 +5,7 @@
   vars:
     error_source: ""
     error_logs: ""
-    ask_content: 発生しているエラーの内容と考えられる原因、調査方法を教えて下さい。
+    ask_content: 発生しているエラーの内容と考えられる原因、調査方法を日本語で教えて下さい。
   tasks:
     - name: Set facts
       ansible.builtin.set_fact:
