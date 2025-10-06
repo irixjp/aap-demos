@@ -15,7 +15,8 @@
 
           {{ error_logs }}
 
-    - debug: msg={{ prompt }}
+    - debug: msg={{ gpt_prompt }}
+
     - name: send prompt
       ansible.builtin.uri:
         url: "{{ ai_api_endpoint }}"
