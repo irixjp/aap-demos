@@ -10,7 +10,8 @@
       ---
 
       {{ error_logs }}
-      
+
+    comment: |
       AIによる一次障害解析結果
       ---
       {{ gpt_response }}
@@ -47,3 +48,20 @@
         ticket_id: "{{ ticket_id }}"
 
   - debug: var=ticket_id
+
+  - uri:
+      url: "{{ redmine_server_url + 'issues/' }}{{ ticket_id | string }}.json"
+      method: PUT
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ redmine_api_key }}"
+      body_format: json
+      body:
+        issue:
+          notes: "{{ comment }}"
+      return_content: yes
+      status_code:
+      - 200
+      - 204
+      timeout: "5"
+    register: redmine_issue_search_result
