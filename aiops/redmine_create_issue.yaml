@@ -1,20 +1,19 @@
 - hosts: all
   gather_facts: false
   vars:
-    issue_subject: サーバー {{ z_target_host }} で障害を検知
+    issue_subject: サーバー {{ target_node }} のエラーログ自動解析
     issue_desc: |
-      対象サーバー {{ z_target_host }}で障害が発生しました。
+      対象サーバー {{ target_host }} でエラーログを検知しました。
       詳細は以下を確認してください
+      
+      最新エラーログ
       ---
-      {{ zabbix_url }}zabbix.php?action=problem.view&hostids%5B0%5D={{ z_host_id }}
-      ---
-      以下がサーバー {{ z_target_host }}の最新エラーログです。
 
       {{ error_logs }}
-      ---
+      
       AIによる一次障害解析結果
-
-      {{ ai_answer }}
+      ---
+      {{ gpt_response }}
 
   tasks:
   - uri:
