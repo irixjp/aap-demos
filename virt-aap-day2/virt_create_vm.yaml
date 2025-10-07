@@ -29,18 +29,17 @@
                 resources:
                   requests:
                     storage: 30Gi
-        template:
-          spec:
-            domain:
-              resources:
-                requests:
-                  memory: 2Gi
-              devices:
-                disks:
-                  - name: disk0
-                    disk:
-                      bus: virtio
-            volumes:
-              - name: disk0
-                dataVolume:
-                  name: centos-stream9
+        spec:
+          domain:
+            resources:
+              requests:
+                memory: 2Gi
+            devices:
+              disks:
+                - name: disk0
+                  disk:
+                    bus: virtio
+          volumes:
+            - name: disk0
+              dataVolume:
+                name: centos-stream9
