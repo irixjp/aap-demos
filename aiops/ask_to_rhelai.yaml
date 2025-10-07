@@ -14,7 +14,8 @@
         rhelai_token: "{{ rhelai_token_input | default('ansible123!') }}"
         gpt_prompt: |
           これは {{ error_source }} です。
-          {{ ask_content }}
+          ログから原因の推定と、調査方法、可能であればエラーへの対処方法を教えて下さい
+          (日本語、markdown形式で出力)
 
           {{ error_logs }}
 
@@ -27,11 +28,11 @@
           Content-Type: "application/json"
           Authorization: "Bearer {{ rhelai_token }}"
         body:
-          prompt: "{{ gpt_prompt | default('What is the capital of the USA?') }}"
-          max_tokens: "{{ max_tokens | default('50') }}"
+          prompt: "{{ gpt_prompt }}"
+          max_tokens: "{{ max_tokens | default('512') }}"
           model: "/root/.cache/instructlab/models/granite-8b-lab-v1"
-          temperature: "{{ input_temperature | default(0) }}"
-          top_p: "{{ input_top_p | default(1) }}"
+          temperature: "{{ input_temperature | default(0.6) }}"
+          top_p: "{{ input_top_p | default(0.9) }}"
           n: "{{ input_n | default(1) }}"
         body_format: json
         return_content: true
