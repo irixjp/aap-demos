@@ -6,7 +6,7 @@
   tasks:
     - name: Generate header string
       ansible.builtin.set_fact:
-        uniq_id_str: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
+        uniq_id_str: "{{ lookup('community.general.random_string', upper=false, numbers=false, special=false) }}"
 
     - name: Generate VM name
       ansible.builtin.set_fact:
