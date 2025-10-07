@@ -1,29 +1,39 @@
 ---
 - hosts: localhost
   gather_facts: false
+  vars:
+    target_os_type: ""
   tasks:
+    - name: Generate header string
+      ansible.builtin.set_fact:
+        uniq_id_str: "{{ lookup('community.general.random_string', numbers=false, special=false) }}"
+
+    - name: Generate VM name
+      ansible.builtin.set_fact:
+        vm_name: "{{ target_os_type }}-{{ uniq_id_str }}"
+
     - name: Get an existing VirtualMachine
       redhat.openshift_virtualization.kubevirt_vm_info:
-        name: rhel9-vm1
+        name: "{{ vm_name }}"
         namespace: rhsc2025-aap
       register: default_testvm
 
     - debug: var=default_testvm
-
+      
     - name: Create a VirtualMachine with a DataVolume template
       redhat.openshift_virtualization.kubevirt_vm:
         state: present
-        name: testvm-with-dv
+        name: "{{ vm_name }}"
         namespace: rhsc2025-aap
         labels:
-          app: testvm-with-dv
+          app: "{{ vm_name }}"
         data_volume_templates:
           - metadata:
-              name: centos-stream9
+              name: "{{ vm_name }}"
             spec:
               sourceRef:
                 kind: DataSource
-                name: centos-stream9
+                name: "{{ target_os_type }}"
                 namespace: openshift-virtualization-os-images
               storage:
                 resources:
@@ -42,4 +52,4 @@
           volumes:
             - name: disk0
               dataVolume:
-                name: centos-stream9
+                name: "{{ vm_name }}"
