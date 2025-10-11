@@ -1,19 +1,11 @@
 ---
-default:
-  inv:
-    organization: Default
-    state: present
-  src:
-    state: present
-    overwrite: true
-    overwrite_vars: true
-    update_on_launch: true
-    source: scm
-    source_project: Platform_dayX_rh_inventories
-
 inventories:
-  - inv:
-      name: Platform_inv_dayX_initial
-      description: root/administratorの初期パスワードログイン用インベントリー
-    src:
-      source_path: inventory.yaml
+  default:
+    inv:
+      organization: Default
+      state: present
+
+  data:
+    - inv:
+        name: zabbix_server
+        description: zabbix_host

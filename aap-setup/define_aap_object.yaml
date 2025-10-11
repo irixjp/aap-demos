@@ -2,7 +2,7 @@
   gather_facts: false
   tasks:
     - name: define inventory
-      when: "inventory" in aap_target_obj
+      when: '"inventory" in aap_target_obj'
       vars_files:
         - data_inventories.yaml
       block:
@@ -10,6 +10,6 @@
           ansible.controller.inventory:
             name: "{{ item.inv.name }}"
             description: "{{ item.inv.description }}"
-            organization: "{{ item.inv.organization | default(default.inv.organization) }}"
-            state: "{{ item.inv.state | default(default.inv.state) }}"
-          loop: "{{ inventories }}"
+            organization: "{{ item.inv.organization | default(inventories.default.inv.organization) }}"
+            state: "{{ item.inv.state | default(inventories.default.inv.state) }}"
+          loop: "{{ inventories.data }}"
