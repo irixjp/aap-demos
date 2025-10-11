@@ -1,0 +1,21 @@
+---
+inventories:
+  default:
+    inv:
+      organization: Default
+      state: present
+    hosts:
+      state: present
+
+  data:
+    - inv:
+        name: localhost
+      hosts:
+        - name: 127.0.0.1
+          variables:
+            ansible_connection: local
+        - name: 172.31.47.251
+    - inv:
+        name: docker-host
+      hosts:
+        - name: 172.31.47.251
