@@ -1,10 +1,11 @@
 - hosts: all
   gather_facts: false
+  vars_files:
+    - data_inventories.yaml
+
   tasks:
     - name: define inventory
       when: '"inventory" in aap_target_obj'
-      vars_files:
-        - data_inventories.yaml
       block:
         - name: define inventories
           ansible.controller.inventory:
