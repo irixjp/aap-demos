@@ -4,6 +4,15 @@ inventories:
     inv:
       organization: Default
       state: present
+    hosts:
+      state: present
+    src:
+      state: present
+      overwrite: true
+      overwrite_vars: true
+      update_on_launch: true
+      source: scm
+      source_project: aap-demo
 
   data:
     - inv:
@@ -16,3 +25,9 @@ inventories:
             example_var: 123
             test1: 5555
         - name: 172.31.47.251
+    - inv:
+        name: test_src
+        description: test
+      src:
+        - source_path: sample_inventory1.yaml
+        - source_path: sample_inventory2.yaml

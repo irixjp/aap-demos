@@ -13,18 +13,21 @@
     description: "{{ item.description | default(omit) }}"
     inventory: "{{ lp_inv.inv.name }}"
     variables: "{{ item.variables | default(omit) }}"
+    state: "{{ item.state | default(inventories.default.hosts.state) }}"
   loop: "{{ lp_inv.hosts }}"
   when: lp_inv.hosts is defined
 
-
-#      ansible.controller.inventory_source:
-#        name: "{{ item.inv.name }}_source"
-#        description: "{{ item.src.description | default('') }}"
-#        inventory: "{{ item.inv.name }}"
-#        source_path: "{{ item.src.source_path }}"
-#        state: "{{ item.src.state | default(default.src.state) }}"
-#        overwrite: "{{ item.src.overwrite | default(default.src.overwrite) }}"
-#        overwrite_vars: "{{ item.src.overwrite_vars | default(default.src.overwrite_vars) }}"
-#        update_on_launch: "{{ item.src.update_on_launch | default(default.src.update_on_launch) }}"
-#        source: "{{ item.src.source | default(default.src.source) }}"
-#        source_project: "{{ item.src.source_project | default(default.src.source_project) }}"
+- name: define source invenry in {{ lp_inv.inv.name }}
+  ansible.controller.inventory_source:
+    name: "{{ item.name }}"
+    description: "{{ item.description | default(omit) }}"
+    inventory: "{{ lp_inv.inv.name }}"
+    source_path: "{{ item.source_path }}"
+    state: "{{ item.state | default(default.src.state) }}"
+    overwrite: "{{ item.overwrite | default(default.src.overwrite) }}"
+    overwrite_vars: "{{ item.overwrite_vars | default(default.src.overwrite_vars) }}"
+    update_on_launch: "{{ item.update_on_launch | default(default.src.update_on_launch) }}"
+    source: "{{ item.source | default(default.src.source) }}"
+    source_project: "{{ item.src.source_project | default(default.src.source_project) }}"
+  loop: "{{ lp_inv.src }}"
+  when: lp_inv.src is defined
