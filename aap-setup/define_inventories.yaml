@@ -5,7 +5,7 @@
     description: "{{ item.inv.description | default(omit) }}"
     organization: "{{ item.inv.organization | default(inventories.default.inv.organization) }}"
     state: "{{ item.inv.state | default(inventories.default.inv.state) }}"
-  when: lp_inv.inv is define
+  when: lp_inv.inv is defined
 
 - name: define hosts {{ item.name  }}
   ansible.controller.inventory_source:
@@ -13,7 +13,7 @@
     description: "{{ item.description | default(omit) }}"
     variables: "{{ item.variables | default(omit) }}"
   loop: "{{ lp_inv.hosts }}"
-  when: lp_inv.hosts is define
+  when: lp_inv.hosts is defined
 
 
 #      ansible.controller.inventory_source:
