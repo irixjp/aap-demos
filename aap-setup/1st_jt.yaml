@@ -20,11 +20,14 @@
             - question_name: 定義するオブジェクトを選択
               question_description: 複数選択可
               variable: aap_target_obj
-              type: multiselect
+              type: multiplechoice
               choices:
                 - inventory
                 - credential
                 - job_template
+              min: ""
+              max: ""
+              default: one
               required: true
             - question_name: データソースファイルを指定
               question_description: data/xxxxx.yaml を指定する
