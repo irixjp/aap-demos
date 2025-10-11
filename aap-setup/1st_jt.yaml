@@ -18,14 +18,16 @@
           description: ""
           spec:
             - question_name: 定義するオブジェクトを選択
+              question_description: 複数選択可
               variable: aap_target_obj
               type: multiplechoice
-              required: true
               choices:
                 - inventory
                 - credential
                 - job_template
+              required: true
             - question_name: データソースファイルを指定
+              question_description: data/xxxxx.yaml を指定する
               variable: aap_target_data
               type: text
               required: true
