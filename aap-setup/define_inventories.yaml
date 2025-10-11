@@ -1,14 +1,14 @@
 ---
 - name: define inventories {{ lp_inv.inv.name }}
   ansible.controller.inventory:
-    name: "{{ item.inv.name }}"
-    description: "{{ item.inv.description | default(omit) }}"
-    organization: "{{ item.inv.organization | default(inventories.default.inv.organization) }}"
-    state: "{{ item.inv.state | default(inventories.default.inv.state) }}"
+    name: "{{ lp_inv.inv.name }}"
+    description: "{{ lp_inv.inv.description | default(omit) }}"
+    organization: "{{ lp_inv.inv.organization | default(inventories.default.inv.organization) }}"
+    state: "{{ lp_inv.inv.state | default(inventories.default.inv.state) }}"
   when: lp_inv.inv is defined
 
-- name: define hosts {{ item.name  }}
-  ansible.controller.inventory_source:
+- name: define hosts {{ item.name }}
+  ansible.controller.host:
     name: "{{ item.name }}"
     description: "{{ item.description | default(omit) }}"
     variables: "{{ item.variables | default(omit) }}"
