@@ -29,5 +29,6 @@ inventories:
         name: test_src
         description: test
       src:
-        - source_path: sample_inventory1.yaml
+        - name: test1
+          source_path: sample_inventory1.yaml
         - source_path: sample_inventory2.yaml

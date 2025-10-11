@@ -19,7 +19,7 @@
 
 - name: define source invenry in {{ lp_inv.inv.name }}
   ansible.controller.inventory_source:
-    name: "{{ item.name }}"
+    name: "{{ item.name | default(item.source_path) }}"
     description: "{{ item.description | default(omit) }}"
     inventory: "{{ lp_inv.inv.name }}"
     source_path: "{{ item.source_path }}"
