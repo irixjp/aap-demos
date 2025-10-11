@@ -1,7 +1,7 @@
 - hosts: all
   gather_facts: false
   vars_files:
-    - data/inventories.yaml
+    - "{{ aap_target_data }}"
 
   tasks:
     - name: define inventory

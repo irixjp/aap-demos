@@ -1,0 +1,31 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: define 1st job template
+      ansible.controller.job_template:
+        name: 0001_define_aap_objects
+        organization: Default
+        state: present
+        inventory: Demo Inventory
+        project: aap-demo
+        playbook: aap-setup/define_aap_object.yaml
+        survey_enabled: true
+        credentials: aap26
+        survey_spec:
+          name: 定義するオブジェクトとデータソースを選択
+          description: ""
+          spec:
+            - question_name: "定義するオブジェクトを選択"
+              variable: 'aap_target_obj'
+              type: 'multiplechoice'
+              required: true
+              choices:
+                - inventory
+                - credential
+                - job_template
+            - question_name: "データソースファイルを指定"
+              variable: 'aap_target_data'
+              type: 'text'
+              required: true
