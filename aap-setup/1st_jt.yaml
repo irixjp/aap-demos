@@ -20,7 +20,7 @@
             - question_name: 定義するオブジェクトを選択
               question_description: 複数選択可
               variable: aap_target_obj
-              type: multiplechoice
+              type: single_choice
               choices:
                 - inventory
                 - credential
