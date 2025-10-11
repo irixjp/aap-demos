@@ -17,15 +17,15 @@
           name: 定義するオブジェクトとデータソースを選択
           description: ""
           spec:
-            - question_name: "定義するオブジェクトを選択"
-              variable: 'aap_target_obj'
-              type: 'multiplechoice'
+            - question_name: 定義するオブジェクトを選択
+              variable: aap_target_obj
+              type: multiplechoice
               required: true
               choices:
                 - inventory
                 - credential
                 - job_template
-            - question_name: "データソースファイルを指定"
-              variable: 'aap_target_data'
-              type: 'text'
+            - question_name: データソースファイルを指定
+              variable: aap_target_data
+              type: text
               required: true
