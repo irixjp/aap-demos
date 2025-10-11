@@ -16,5 +16,3 @@ inventories:
             example_var: 123
             test1: 5555
         - name: 172.31.47.251
-          description: test host2
-        

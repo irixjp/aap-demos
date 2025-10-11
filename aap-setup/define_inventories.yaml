@@ -7,10 +7,11 @@
     state: "{{ lp_inv.inv.state | default(inventories.default.inv.state) }}"
   when: lp_inv.inv is defined
 
-- name: define hosts {{ item.name }}
+- name: define host in {{ lp_inv.inv.name }}
   ansible.controller.host:
     name: "{{ item.name }}"
     description: "{{ item.description | default(omit) }}"
+    inventory: "{{ lp_inv.inv.name }}"
     variables: "{{ item.variables | default(omit) }}"
   loop: "{{ lp_inv.hosts }}"
   when: lp_inv.hosts is defined
