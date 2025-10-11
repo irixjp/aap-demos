@@ -14,8 +14,7 @@ inventories:
         - name: 127.0.0.1
           variables:
             ansible_connection: local
-        - name: 172.31.47.251
     - inv:
         name: docker-host
       hosts:
-        - name: 172.31.47.251
+        - name: 172.31.47.250
