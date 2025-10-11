@@ -1,0 +1,90 @@
+---
+- name: Setup Zabbix for EDA Demo
+  hosts: all
+  gather_facts: false
+  vars:
+    ansible_network_os: community.zabbix.zabbix
+    ansible_connection: httpapi
+    ansible_httpapi_port: 8080
+    ansible_httpapi_use_ssl: false
+    ansible_httpapi_validate_certs: false
+    ansible_zabbix_url_path: ""
+  tasks:
+
+    - name: Set credentials to access Zabbix Server API
+      ansible.builtin.set_fact:
+        ansible_user: "{{ zx_username }}"
+        ansible_httpapi_pass: "{{ zx_password }}"
+
+    - name: disable zabbix server monitoring
+      community.zabbix.zabbix_host:
+        host_name: Zabbix server
+        status: disabled
+        state: present
+
+    - name: register demo host
+      community.zabbix.zabbix_host:
+        host_name: zabbix-agent-01
+        visible_name: zabbix-agent-01
+        description: demo host on docker
+        host_groups:
+          - Linux servers
+        status: enabled
+        state: present
+        interfaces:
+          - type: 1
+            main: 1
+            useip: 0
+            dns: "zabbix-agent-01"
+            port: "10050"
+
+    - name: get host info
+      community.zabbix.zabbix_host_info:
+        host_name: zabbix-agent-01
+      register: host_info
+
+    - debug: var=host_info
+
+    - ansible.builtin.set_fact:
+        iface_id: "{{ host_info.hosts[0].hostinterfaces[0].interfaceid }}"
+
+    - name: add monitoring items
+      community.zabbix.zabbix_item:
+        name: system_monitoring_{{ item }}
+        host_name: zabbix-agent-01
+        params:
+          type: zabbix_agent
+          key: vfs.file.exists["/tmp/senario{{ item }}.txt"]
+          value_type: numeric_unsigned
+          interval: 10s
+          interfaceid: "{{ iface_id }}"
+          history: 1d
+          trends: 0
+          status: enabled
+        state: present
+      loop: [1, 2, 3]
+
+    - name: create zabbix trigger
+      community.zabbix.zabbix_trigger:
+        name: monitoring{{ item[0] }}_trigger{{ item[0] }}
+        host_name: zabbix-agent-01
+        params:
+          severity: "{{ item[1] }}"
+          expression: last(/zabbix-agent-01/vfs.file.exists["/tmp/senario{{ item[0] }}.txt"])=0
+          manual_close: false
+          enabled: true
+        state: present
+      loop:
+        - [1, 'average']
+        - [2, 'high']
+        - [3, 'disaster']
+
+    - name: add EDA user
+      community.zabbix.zabbix_user:
+        username: eda
+        name: event-driven ansible
+        usrgrps:
+          - Zabbix administrators
+        role_name: Super admin role
+        passwd: "{{ zx_password }}"
+        state: present
