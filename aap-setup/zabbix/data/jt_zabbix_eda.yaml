@@ -2,17 +2,14 @@
 default:
   jt:
     organization: Default
-    state: present
     project: aap-demo
-    inventory: localhost
   wf:
     organization: Default
-    state: present
 
 jt:
   - name: EDA_0000_シナリオ操作
-    organization: Default
-    project: aap-demo
+    organization: "{{ default.jt.organization }}"
+    project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/scenario_ctrl.yaml
     inventory: docker-host
     credentials:
@@ -42,8 +39,41 @@ jt:
 
   - name: EDA_0001_チケットオープン
     organization: "{{ default.jt.organization }}"
-    project: aap-demo
+    project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_create_issue.yaml
+    inventory: localhost
+
+  - name: EDA_0002_状態確認とチケット追記
+    organization: "{{ default.jt.organization }}"
+    project: "{{ default.jt.project }}"
+    playbook: zabbix-eda/playbooks/edmine_check_status_and_add_log.yaml
+    inventory: docker-host
+    credentials:
+      - docker-server
+    become_enabled: true
+
+  - name: EDA_0003a_チケットへの結果追加
+    organization: "{{ default.jt.organization }}"
+    project: "{{ default.jt.project }}"
+    playbook: zabbix-eda/playbooks/redmine_add_comment_success.yaml
+    inventory: localhost
+
+  - name: EDA_0003b_チケットクローズ
+    organization: "{{ default.jt.organization }}"
+    project: "{{ default.jt.project }}"
+    playbook: zabbix-eda/playbooks/redmine_add_comment_success.yaml
+    inventory: localhost
+
+  - name: EDA_00チケットクローズ
+    organization: "{{ default.jt.organization }}"
+    project: "{{ default.jt.project }}"
+    playbook: zabbix-eda/playbooks/redmine_add_comment_faild.yaml
+    inventory: localhost
+
+  - name: EDA_0005_復旧停止を通知
+    organization: "{{ default.jt.organization }}"
+    project: "{{ default.jt.project }}"
+    playbook: zabbix-eda/playbooks/redmine_add_comment_deny.yaml
     inventory: localhost
 
 wf: []

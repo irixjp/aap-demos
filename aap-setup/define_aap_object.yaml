@@ -17,6 +17,6 @@
       loop: "{{ jt }}"
 
     - name: define workflows
-      ansible.controller.job_template: "{{ item }}"
+      ansible.controller.workflow_job_template: "{{ item }}"
       when: '"job_template" in aap_target_obj'
       loop: "{{ wf }}"
