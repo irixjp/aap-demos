@@ -1,0 +1,33 @@
+---
+default:
+  inv:
+    organization: Default
+    state: present
+  hosts:
+    state: present
+  src:
+    state: present
+    overwrite: true
+    overwrite_vars: true
+    update_on_launch: true
+    source: scm
+    source_project: aap-demo
+
+inventories:
+  - inv:
+      name: zabbix_server
+      description: zabbix_host
+    hosts:
+      - name: 172.31.47.250
+        description: test host1
+        variables:
+          example_var: 123
+          test1: 5555
+      - name: 172.31.47.251
+  - inv:
+      name: test_src
+      description: test
+    src:
+      - name: test1
+        source_path: sample_inventory1.yaml
+      - source_path: sample_inventory2.yaml

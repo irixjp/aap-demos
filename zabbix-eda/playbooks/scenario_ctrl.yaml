@@ -6,14 +6,14 @@
   tasks:
     - name: シナリオ{{ senario_num }} 開始
       ansible.builtin.shell: |
-        podman exec zabbix-agent-01 rm /tmp/senario{{ senario_num }}.txt
+        docker exec zabbix-agent-01 rm /tmp/senario{{ senario_num }}.txt
       when:
         - senario_mode == 'start'
 
     - name: シナリオ終了
       ansible.builtin.shell: |
-        podman exec zabbix-agent-01 touch /tmp/senario1.txt
-        podman exec zabbix-agent-01 touch /tmp/senario2.txt
-        podman exec zabbix-agent-01 touch /tmp/senario3.txt
+        docker exec zabbix-agent-01 touch /tmp/senario1.txt
+        docker exec zabbix-agent-01 touch /tmp/senario2.txt
+        docker exec zabbix-agent-01 touch /tmp/senario3.txt
       when:
         - senario_mode == 'end'

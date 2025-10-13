@@ -1,0 +1,43 @@
+---
+default:
+  jt:
+    organization: Default
+    state: present
+    project: aap-demo
+    inventory: localhost
+  wf:
+    organization: Default
+    state: present
+
+jt:
+  - name: EDA_0000_シナリオ操作
+    organization: Default
+    project: aap-demo
+    playbook: zabbix-eda/playbooks/scenario_ctrl.yaml
+    inventory: docker-host
+    credentials:
+      - docker-server
+    survey_enabled: true
+    survey_spec:
+      name: 実行するシナリオを指定
+      description: ""
+      spec:
+        - question_name: シナリオを選択
+          variable: senario_num
+          type: multiplechoice
+          choices:
+            - "1"
+            - "2"
+            - "3"
+          default: "1"
+          required: true
+        - question_name: 開始/停止
+          variable: senario_mode
+          type: multiplechoice
+          choices:
+            - start
+            - end
+          default: start
+          required: true
+      
+wf: []

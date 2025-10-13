@@ -4,9 +4,19 @@
     - "{{ aap_target_data }}"
 
   tasks:
-    - name: define inventory
+    - name: define inventories
       include_tasks: define_inventories.yaml
       when: '"inventory" in aap_target_obj'
-      loop: "{{ inventories.data }}"
+      loop: "{{ inventories }}"
       loop_control:
         loop_var: lp_inv
+
+    - name: define job templates
+      ansible.controller.job_template: "{{ item }}"
+      when: '"job_template" in aap_target_obj'
+      loop: "{{ jt }}"
+
+    - name: define workflows
+      ansible.controller.job_template: "{{ item }}"
+      when: '"job_template" in aap_target_obj'
+      loop: "{{ wf }}"
