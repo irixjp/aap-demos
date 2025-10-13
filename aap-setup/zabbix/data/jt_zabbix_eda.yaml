@@ -39,5 +39,11 @@ jt:
             - end
           default: start
           required: true
-      
+
+  - name: EDA_0001_チケットオープン
+    organization: "{{ default.jt.organization }}"
+    project: aap-demo
+    playbook: zabbix-eda/playbooks/redmine_create_issue.yaml
+    inventory: localhost
+
 wf: []
