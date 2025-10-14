@@ -117,7 +117,8 @@ wf:
           name: EDA_0001_チケットオープン
           type: job_template
         related:
-          success_nodes: ["node002"]
+          success_nodes:
+            - identifier: node002
           failure_nodes: []
           always_nodes: []
       - identifier: node002
