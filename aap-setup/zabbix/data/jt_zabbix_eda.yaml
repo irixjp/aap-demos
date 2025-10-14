@@ -112,15 +112,15 @@ wf:
           required: true
 
     workflow_nodes:
-      - identifier: チケットオープン
+      - identifier: eda_node001
         unified_job_template:
           name: EDA_0001_チケットオープン
           type: job_template
         related:
-          success_nodes: ["初期状態確認"]
+          success_nodes: ["eda_node002"]
           failure_nodes: []
           always_nodes: []
-      - identifier: 初期状態確認
+      - identifier: eda_node002
         unified_job_template:
           name: EDA_0002_状態確認とチケット追記
           type: job_template
