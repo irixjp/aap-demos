@@ -154,7 +154,7 @@ wf:
           name: EDA_0000_シナリオ操作
           type: job_template
         extra_data:
-          senario_num: 1
+          senario_num: "1"
           senario_mode: end
         related:
           success_nodes:
