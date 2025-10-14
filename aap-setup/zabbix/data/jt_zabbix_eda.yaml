@@ -42,6 +42,8 @@ jt:
     project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_create_issue.yaml
     inventory: localhost
+    credentials:
+      - redmine
 
   - name: EDA_0002_状態確認とチケット追記
     organization: "{{ default.jt.organization }}"
@@ -50,6 +52,7 @@ jt:
     inventory: docker-host
     credentials:
       - docker-server
+      - redmine
     become_enabled: true
 
   - name: EDA_0003a_チケットへの結果追加
@@ -57,30 +60,36 @@ jt:
     project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_add_comment_success.yaml
     inventory: localhost
+    credentials:
+      - redmine
 
   - name: EDA_0003b_チケットクローズ
     organization: "{{ default.jt.organization }}"
     project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_add_comment_success.yaml
     inventory: localhost
+    credentials:
+      - redmine
 
   - name: EDA_0004_チケットクローズ
     organization: "{{ default.jt.organization }}"
     project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_add_comment_faild.yaml
     inventory: localhost
+    credentials:
+      - redmine
 
   - name: EDA_0005_復旧停止を通知
     organization: "{{ default.jt.organization }}"
     project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_add_comment_deny.yaml
     inventory: localhost
+    credentials:
+      - redmine
 
 wf:
   - name: EDA_Zabbix_Auto_Response
     organization: "{{ default.wf.organization }}"
-    credentials:
-      - redmine
     extra_vars:
       zabbix_url: http://172.31.47.250:8080/
       project_id: 1
