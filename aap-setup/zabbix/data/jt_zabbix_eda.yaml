@@ -137,8 +137,6 @@ wf:
         related:
           success_nodes:
             - identifier: 初期状態確認
-          failure_nodes: []
-          always_nodes: []
       - identifier: 初期状態確認
         unified_job_template:
           name: EDA_0002_状態確認とチケット追記
@@ -148,7 +146,6 @@ wf:
             - identifier: シナリオ復旧処理
           failure_nodes:
             - identifier: 自動復旧の問題を検知
-          always_nodes: []
       - identifier: シナリオ復旧処理
         unified_job_template:
           name: EDA_0000_シナリオ操作
@@ -159,8 +156,6 @@ wf:
         related:
           success_nodes:
             - identifier: 結果追加1
-          failure_nodes: []
-          always_nodes: []
       - identifier: 結果追加1
         unified_job_template:
           name: EDA_0003a_チケットへの結果追加
@@ -174,17 +169,8 @@ wf:
         unified_job_template:
           name: EDA_0003b_チケットクローズ
           type: job_template
-        related:
-          success_nodes: []
-          failure_nodes: []
-          always_nodes: []
 
       - identifier: 自動復旧の問題を検知
         unified_job_template:
           name: EDA_0004_問題発生を通知
           type: job_template
-        related:
-          success_nodes:
-            - identifier: シナリオ復旧処理
-          failure_nodes: []
-          always_nodes: []
