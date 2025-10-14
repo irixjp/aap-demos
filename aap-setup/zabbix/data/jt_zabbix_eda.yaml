@@ -79,6 +79,8 @@ jt:
 wf:
   - name: EDA_Zabbix_Auto_Response
     organization: "{{ default.wf.organization }}"
+    credentials:
+      - redmine
     extra_vars:
       zabbix_url: http://172.31.47.250:8080/
       project_id: 1
