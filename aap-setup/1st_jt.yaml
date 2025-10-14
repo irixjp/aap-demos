@@ -34,3 +34,19 @@
               variable: aap_target_data
               type: text
               required: true
+
+    - name: Custom credential for common api token
+      ansible.controller.credential_type:
+        name: My common api token
+        description: 汎用的なAPIトークンを格納する。lookup('env', 'MY_COMMON_TOKEN') で参照可能。
+        inputs:
+          fields:
+            - id: my_token
+              type: string
+              label: my_token
+          required:
+            - my_token
+        injectors:
+          env:
+            MY_COMMON_TOKEN: \'\{\{ my_token \}\}\'
+        state: present

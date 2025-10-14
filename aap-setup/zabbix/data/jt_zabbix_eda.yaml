@@ -46,7 +46,7 @@ jt:
   - name: EDA_0002_状態確認とチケット追記
     organization: "{{ default.jt.organization }}"
     project: "{{ default.jt.project }}"
-    playbook: zabbix-eda/playbooks/edmine_check_status_and_add_log.yaml
+    playbook: zabbix-eda/playbooks/redmine_check_status_and_add_log.yaml
     inventory: docker-host
     credentials:
       - docker-server
@@ -64,7 +64,7 @@ jt:
     playbook: zabbix-eda/playbooks/redmine_add_comment_success.yaml
     inventory: localhost
 
-  - name: EDA_00チケットクローズ
+  - name: EDA_0004_チケットクローズ
     organization: "{{ default.jt.organization }}"
     project: "{{ default.jt.project }}"
     playbook: zabbix-eda/playbooks/redmine_add_comment_faild.yaml
@@ -76,4 +76,29 @@ jt:
     playbook: zabbix-eda/playbooks/redmine_add_comment_deny.yaml
     inventory: localhost
 
-wf: []
+wf:
+  - name: EDA_Zabbix_Auto_Response
+    organization: "{{ default.wf.organization }}"
+    extra_vars:
+      zabbix_url: http://172.31.47.250:8080/
+      redmine_server_url: http://172.31.47.250:8880/
+      redmine_api_key: 
+      project_id: 1
+      tracker_id: 1
+    workflow_nodes:
+      - identifier: node9999-1
+        unified_job_template:
+          name: Platform_dayX_9999_jt_test1
+          type: job_template
+        related:
+          success_nodes: []
+          failure_nodes: []
+          always_nodes: []
+      - identifier: node9999-3
+        unified_job_template:
+          name: Platform_dayX_9999_jt_test3
+          type: job_template
+        related:
+          success_nodes: []
+          failure_nodes: []
+          always_nodes: []
