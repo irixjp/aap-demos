@@ -35,20 +35,25 @@
               type: text
               required: true
 
-    - name: Custom credential for common api token
+    - name: Custom credential for RedMine API Key
       ansible.controller.credential_type:
-        name: My common api token
-        description: 汎用的なAPIトークンを格納する。extra_vars の MY_COMMON_TOKEN で参照可能。
+        name: RedMine API Key
+        description: RedMine API Key を格納し、Playbookから redmine_api_key で参照可能。
         kind: cloud
         inputs:
           fields:
-            - id: my_token
+            - id: redmine_server_url
               type: string
-              label: my_token
+              label: redmine_server_url
+            - id: redmine_api_key
+              type: string
+              label: redmine_api_key
               secret: true
           required:
-            - my_token
+            - redmine_server_url
+            - redmine_api_key
         injectors:
           extra_vars:
-            MY_COMMON_TOKEN: "{{ '{{' }} my_token {{ '}}' }}"
+            redmine_server_url: "{{ '{{' }} redmine_server_url {{ '}}' }}"
+            redmine_api_key: "{{ '{{' }} redmine_api_key {{ '}}' }}"
         state: present
