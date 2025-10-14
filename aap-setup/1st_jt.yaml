@@ -38,7 +38,7 @@
     - name: Custom credential for common api token
       ansible.controller.credential_type:
         name: My common api token
-        description: 汎用的なAPIトークンを格納する。lookup('env', 'MY_COMMON_TOKEN') で参照可能。
+        description: 汎用的なAPIトークンを格納する。extra_vars の MY_COMMON_TOKEN で参照可能。
         kind: cloud
         inputs:
           fields:
