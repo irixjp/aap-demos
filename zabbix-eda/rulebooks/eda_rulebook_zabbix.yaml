@@ -19,7 +19,7 @@
                 z_event_id: "{{ event.payload.event_id }}"
                 z_event_severity: "{{ event.payload.event_severity }}"
                 z_trigger_name: "{{ event.payload.trigger_name }}"
-                scenario_num: 1
+                scenario_num: "1"
 
     - name: Trigger action of scenario 2
       condition: >-
@@ -36,7 +36,7 @@
                 z_event_id: "{{ event.payload.event_id }}"
                 z_event_severity: "{{ event.payload.event_severity }}"
                 z_trigger_name: "{{ event.payload.trigger_name }}"
-                scenario_num: 2
+                scenario_num: "2"
 
     - name: Trigger action of scenario 3
       condition: >-
@@ -53,4 +53,4 @@
                 z_event_id: "{{ event.payload.event_id }}"
                 z_event_severity: "{{ event.payload.event_severity }}"
                 z_trigger_name: "{{ event.payload.trigger_name }}"
-                scenario_num: 3
+                scenario_num: "3"
