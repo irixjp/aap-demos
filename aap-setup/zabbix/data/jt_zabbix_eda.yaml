@@ -94,6 +94,7 @@ wf:
       zabbix_url: http://172.31.47.250:8080/
       project_id: 1
       tracker_id: 1
+    survey_enabled: true
     survey_spec:
       name: EDAから受け取る変数を指定
       description: ""

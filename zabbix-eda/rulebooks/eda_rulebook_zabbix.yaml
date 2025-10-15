@@ -1,10 +1,8 @@
 ---
-- name: Listen for webhook 8111 from Zabbix
+- name: Zabbix EDA integration DEMO
   hosts: all
   sources:
-    - ansible.eda.webhook:
-        host: 0.0.0.0
-        port: 8111
+    - name: 'basic'
   rules:
     - name: Trigger action of scenario 1
       condition: >-
@@ -12,7 +10,7 @@
         and event.payload.trigger_name == 'monitoring1_trigger1'
       actions:
         - run_workflow_template:
-            name: zabbix_eda_auto_response
+            name: EDA_Zabbix_Auto_Response
             organization: Default
             job_args:
               extra_vars:
@@ -29,7 +27,7 @@
         and event.payload.trigger_name == 'monitoring2_trigger2'
       actions:
         - run_workflow_template:
-            name: zabbix_eda_auto_response
+            name: EDA_Zabbix_Auto_Response
             organization: Default
             job_args:
               extra_vars:
@@ -46,7 +44,7 @@
         and event.payload.trigger_name == 'monitoring3_trigger3'
       actions:
         - run_workflow_template:
-            name: zabbix_eda_auto_response
+            name: EDA_Zabbix_Auto_Response
             organization: Default
             job_args:
               extra_vars:
