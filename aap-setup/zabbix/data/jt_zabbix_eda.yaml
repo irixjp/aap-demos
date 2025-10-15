@@ -143,10 +143,10 @@ wf:
           type: job_template
         related:
           success_nodes:
-            - identifier: シナリオ復旧処理
+            - identifier: シナリオ復旧処理1
           failure_nodes:
             - identifier: 自動復旧の問題を検知
-      - identifier: シナリオ復旧処理
+      - identifier: シナリオ復旧処理1
         unified_job_template:
           name: EDA_0000_シナリオ操作
           type: job_template
@@ -163,8 +163,6 @@ wf:
         related:
           success_nodes:
             - identifier: チケットクローズ1
-          failure_nodes: []
-          always_nodes: []
       - identifier: チケットクローズ1
         unified_job_template:
           name: EDA_0003b_チケットクローズ
@@ -173,4 +171,43 @@ wf:
       - identifier: 自動復旧の問題を検知
         unified_job_template:
           name: EDA_0004_問題発生を通知
+          type: job_template
+        related:
+          success_nodes:
+            - identifier: 復旧処理の継続を確認
+      - identifier: 復旧処理の継続を確認
+        unified_job_template:
+          name: 復旧処理の継続を確認
+          type: workflow_approval
+          timeout: 300
+        related:
+          success_nodes:
+            - identifier: シナリオ復旧処理2
+          failure_nodes:
+            - identifier: 復旧停止を通知
+      - identifier: シナリオ復旧処理2
+        unified_job_template:
+          name: EDA_0000_シナリオ操作
+          type: job_template
+        extra_data:
+          senario_num: "2"
+          senario_mode: end
+        related:
+          success_nodes:
+            - identifier: 結果追加2
+      - identifier: 結果追加2
+        unified_job_template:
+          name: EDA_0003a_チケットへの結果追加
+          type: job_template
+        related:
+          success_nodes:
+            - identifier: チケットクローズ2
+      - identifier: チケットクローズ2
+        unified_job_template:
+          name: EDA_0003b_チケットクローズ
+          type: job_template
+
+      - identifier: 復旧停止を通知
+        unified_job_template:
+          name: EDA_0005_復旧停止を通知
           type: job_template
