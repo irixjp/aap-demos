@@ -1,0 +1,23 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: openshift inventory
+      ansible.controller.inventory:
+        name: OpenShift Virtual Machines
+        organization: default
+        state: present
+ 
+    - name: openshift virt source inventory
+      ansible.controller.inventory_source:
+        name: OpenShift Virtual Machines Source
+        execution_environment: Day 2 EE
+        inventory: OpenShift Virtual Machines
+        source: openshift_virtualization
+        credential: OpenShift Credential
+        source_path: "{{ item.source_path }}"
+        update_on_launch: true
+        update_cache_timeout: 0
+        state: present
+
