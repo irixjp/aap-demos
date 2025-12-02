@@ -1,7 +1,7 @@
 - hosts: all
   gather_facts: false
   vars:
-    issue_subject: サーバー {{ target_node }} のエラーログ自動解析
+    issue_subject: サーバー {{ target_node }} のエラーログ自動解析 {{ linux_target_log | default(win_target_log) }}
     issue_desc: |
       対象サーバー {{ target_node }} でエラーログを検知しました。
       詳細は以下を確認してください
