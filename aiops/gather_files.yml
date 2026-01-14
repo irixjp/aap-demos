@@ -1,0 +1,24 @@
+---
+- name: ファイルとディレクトリを集約
+  hosts: "{{ target_node }}"
+  vars:
+    linux_files:
+      - /etc/hosts
+      - /etc/ssh
+      - /var/log/nginx
+    export_dir: "/tmp/exports/{{ transaction_id }}"
+
+  tasks:
+    - name: 出力先ディレクトリを作成
+      ansible.builtin.file:
+        path: "{{ export_dir }}"
+        state: directory
+
+    - name: ホスト内コピーを実行 (rsync)
+      ansible.posix.synchronize:
+        src: "{{ item }}"
+        dest: "{{ export_dir }}/{{ item | dirname }}/"
+        archive: yes
+      delegate_to: "{{ inventory_hostname }}"
+      loop: "{{ linux_files }}"
+      ignore_errors: yes
