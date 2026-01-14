@@ -1,0 +1,20 @@
+---
+- name: Create Transaction Directory Playbook
+  hosts: all
+  gather_facts: no
+  vars:
+    base_dir: "/home/ec2-user/gemini_aiops/transactions"
+    transaction_id: "{{ transaction_id }}"
+    transaction_dir: "{{ base_dir }}/{{ transaction_id }}"
+
+  tasks:
+    - name: Create transaction directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ transaction_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Export transaction_dir to stats
+      ansible.builtin.set_stats:
+        data:
+          transaction_dir: "{{ transaction_dir }}"

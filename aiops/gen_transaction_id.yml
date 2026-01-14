@@ -1,0 +1,17 @@
+---
+- name: Generate Transaction ID for following playbooks
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Generate a unique transaction ID
+      set_fact:
+        transaction_id: "{{ lookup('pipe', 'uuidgen') }}"
+
+    - name: Display the generated transaction ID
+      debug:
+        msg: "Generated Transaction ID: {{ transaction_id }}"
+
+    - name: Save transaction ID to stats
+      set_stats:
+        data:
+          transaction_id: "{{ transaction_id }}"

@@ -1,0 +1,21 @@
+---
+- name: Set instruction and prompt for GEMINI
+  hosts: all
+  gather_facts: false
+  vars:
+    instruction_text: aaa
+    prompt_text: bbb
+  tasks:
+    - name: put instruction file
+      ansible.builtin.copy:
+        dest: "{{ transaction_dir }}/.instruction"
+        content: |
+          {{ instruction_text }}
+        mode: '0644'
+
+    - name: put prompt file
+      ansible.builtin.copy:
+        dest: "{{ transaction_dir }}/.prompt"
+        content: |
+          {{ prompt_text }}
+        mode: '0644'
