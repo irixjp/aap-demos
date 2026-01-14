@@ -5,7 +5,7 @@
     transaction_id: "{{ transaction_id }}"
     remote_src_dir: "/tmp/exports/{{ transaction_id }}"
     remote_archive: "/tmp/{{ inventory_hostname }}_{{ transaction_id }}.tar.gz"
-    local_dest_dir: "/tmp/export/{{ transaction_id }}/{{ inventory_hostname }}"
+    local_dest_dir: "/tmp/exports/{{ transaction_id }}/{{ inventory_hostname }}"
 
   tasks:
     - name: リモート側でファイルを tar.gz に固める
