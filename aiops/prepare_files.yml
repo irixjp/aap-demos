@@ -25,8 +25,7 @@
         if [ ! -d "{{ final_dest }}" ]; then
           mv "{{ src_dir }}" "{{ final_dest }}"
         else
-          echo "{{ final_dest }} already exists, skipping."
+          mv "{{ src_dir }}/*" "{{ final_dest }}"
         fi
       when: src_stat.stat.exists
       register: move_result
-      changed_when: "'already exists' not in move_result.stdout"
