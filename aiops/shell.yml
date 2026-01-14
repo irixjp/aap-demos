@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - ansible.builtin.shell: |
+        {{ import_commands }}
+      register: ret
+
+    - ansible.builtin.debug: var=ret
