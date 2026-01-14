@@ -19,7 +19,4 @@
       register: command_results
 
     - name: 保存完了の表示
-      ansible.builtin.debug:
-        msg: "保存完了: {{ item.item }} -> {{ export_dir }}/{{ item.ansible_facts.safe_filename }}.log"
-      loop: "{{ command_results.results }}"
-      label: "{{ item.item }}"
+      ansible.builtin.debug: var=command_results
