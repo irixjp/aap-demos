@@ -19,13 +19,7 @@
       register: src_stat
 
     - name: 移動
-      # 移動先ディレクトリ（final_dest）がまだ存在しない場合はリネーム
-      # 存在する場合は、中身が二重にならないよう shell で制御
       ansible.builtin.shell: |
-        if [ ! -d "{{ final_dest }}" ]; then
-          mv "{{ src_dir }}" "{{ final_dest }}"
-        else
-          mv "{{ src_dir }}/*" "{{ final_dest }}"
-        fi
+        mv {{ src_dir }}/* {{ final_dest }}
       when: src_stat.stat.exists
       register: move_result
