@@ -1,0 +1,28 @@
+---
+- name: 移動処理の準備と実行
+  hosts: all
+  vars:
+    src_dir: "/home/ec2-user/exports/{{ transaction_id }}"
+    dest_dir: "/home/ec2-user/gemini_aiops/transactions/{{ transaction_id }}"
+    dest_parent: "/home/ec2-user/gemini_aiops/transactions"
+
+  tasks:
+    - name: 移動先の親ディレクトリが存在することを確認
+      ansible.builtin.file:
+        path: "{{ dest_parent }}"
+        state: directory
+        mode: '0755'
+
+    - name: ソースディレクトリが存在する場合のみ移動を実行
+      ansible.builtin.stat:
+        path: "{{ src_dir }}"
+      register: src_stat
+
+    - name: ディレクトリを移動
+      ansible.builtin.command:
+        cmd: "mv {{ src_dir }} {{ dest_dir }}"
+      when: 
+        - src_stat.stat.exists
+        - src_stat.stat.isdir
+      args:
+        removes: "{{ src_dir }}"
