@@ -1,0 +1,25 @@
+---
+- hosts: "{{ target_node }}"
+  gather_facts: false
+  vars:
+    linux_commands:
+      - journalctl -p err -n 10
+      - ps -ef
+      - free -h
+      - df -h
+    export_dir: "/tmp/exports/{{ transaction_id }}"
+  tasks:
+    - name: 各コマンドを実行して結果を保存
+      ansible.builtin.shell: "{{ item }} > {{ export_dir }}/{{ safe_filename }}.log"
+      loop: "{{ linux_commands }}"
+      vars:
+        # regex_replace で 英数字、ハイフン、アンダースコア 以外を "_" に置換
+        # / や スペース もすべて "_" に変換
+        safe_filename: "{{ item | regex_replace('[^a-zA-Z0-9_-]', '_') }}"
+      register: command_results
+
+    - name: 保存完了の表示
+      ansible.builtin.debug:
+        msg: "保存完了: {{ item.item }} -> {{ export_dir }}/{{ item.ansible_facts.safe_filename }}.log"
+      loop: "{{ command_results.results }}"
+      label: "{{ item.item }}"
