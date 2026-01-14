@@ -1,6 +1,6 @@
 ---
 - name: リモートファイルをアーカイブして一括回収する
-  hosts: "{{ target_host }}"
+  hosts: "{{ target_node }}"
   vars:
     transaction_id: "{{ transaction_id }}"
     remote_src_dir: "/tmp/exports/{{ transaction_id }}"
