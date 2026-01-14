@@ -9,6 +9,11 @@
       - df -h
     export_dir: "/tmp/exports/{{ transaction_id }}"
   tasks:
+    - name: 出力先ディレクトリを作成
+      ansible.builtin.file:
+        path: "{{ export_dir }}"
+        state: directory
+    
     - name: 各コマンドを実行して結果を保存
       ansible.builtin.shell: "{{ item }} > {{ export_dir }}/{{ safe_filename }}.log"
       loop: "{{ linux_commands }}"
