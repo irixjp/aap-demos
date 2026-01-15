@@ -3,8 +3,8 @@
   hosts: all
   gather_facts: false
   vars:
-    instruction_text: aaa
-    prompt_text: bbb
+    instruction_text: あなたは熟練のSREです。
+    prompt_text: ログとコマンド結果からエラーやエラーの予兆を見つけてください。
   tasks:
     - name: put instruction file
       ansible.builtin.copy:
