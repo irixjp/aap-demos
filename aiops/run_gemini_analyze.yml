@@ -10,9 +10,7 @@
   tasks:
     - name: exec gemini analyze
       ansible.builtin.shell: |
-        env
-        export GEMINI_API_KEY=${common_api_key}
-        echo ${GEMINI_API_KEY}
+        export GEMINI_API_KEY={{ lookup('ansible.builtin.env', 'common_api_key') }}
         # uv run python log_analyzer.py {{ transaction_dir }}
         echo {{ transaction_dir }}
         uv run python list_models.py
