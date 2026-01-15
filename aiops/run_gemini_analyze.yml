@@ -1,0 +1,28 @@
+---
+- name: Run analyze files with Gemini
+  hosts: all
+  gather_facts: no
+  vars:
+    base_dir: "/home/ec2-user/gemini_aiops"
+    transaction_id: "{{ transaction_id }}"
+    transaction_dir: "{{ base_dir }}/transactions/{{ transaction_id }}"
+
+  tasks:
+    - name: exec gemini analyze
+      ansible.builtin.shell: |
+        export GEMINI_API_KEY={{ common_api_key }}
+        # uv run python log_analyzer.py {{ transaction_dir }}
+        echo {{ transaction_dir }}
+        uv run python list_models.py
+      args:
+        chdir: "{{ base_dir }}"
+      register: ret_analyze
+
+    - name: show target tree
+      ansible.builtin.shell: |
+        tree {{ transaction_dir }}
+      register: ret_tree
+
+    - ansible.builtin.debug: var=ret_analyze.stdout
+    - ansible.builtin.debug: var=ret_tree.stdout
+
