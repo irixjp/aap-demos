@@ -1,0 +1,69 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    project_id: 1
+    tracker_id: 3
+    redmine_server_url: http://redmine.example.com:8080
+    issue_subject: サーバー {{ target_node }} の状態解析結果 {{ transaction_id }}
+    issue_desc: |
+      対象サーバー {{ target_node }} でのログの分析を行いました。
+      
+      対象エラーログ
+      ---
+      ```
+      {{ analyze_target_files }}
+      ```
+    comment: |
+      AIによる一次障害解析結果
+      ---
+      {{ analyze_result }}
+
+  tasks:
+  - uri:
+      url: "{{ redmine_server_url + '/issues.json' }}"
+      method: POST
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ lookup('ansible.builtin.env', 'common_api_key') }}"
+      body_format: json
+      body:
+        issue:
+          project_id: "{{ project_id }}"
+          tracker_id: "{{ tracker_id }}"
+          subject: "{{ issue_subject }}"
+          description: "{{ issue_desc }}"
+      return_content: yes
+      status_code:
+      - 200
+      - 201
+      timeout: "5"
+    register: redmine_issue_search_result
+
+  - debug: var=redmine_issue_search_result
+  - debug: var=redmine_issue_search_result.json.issue.id
+
+  - set_fact:
+      ticket_id: "{{ redmine_issue_search_result.json.issue.id }}"
+
+  - set_stats:
+      data:
+        ticket_id: "{{ ticket_id }}"
+
+  - debug: var=ticket_id
+
+  - uri:
+      url: "{{ redmine_server_url + 'issues/' }}{{ ticket_id | string }}.json"
+      method: PUT
+      validate_certs: false
+      headers:
+        X-Redmine-API-Key: "{{ redmine_api_key }}"
+      body_format: json
+      body:
+        issue:
+          notes: "{{ comment }}"
+      return_content: yes
+      status_code:
+      - 200
+      - 204
+      timeout: "5"
+    register: redmine_issue_search_result

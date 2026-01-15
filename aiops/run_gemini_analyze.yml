@@ -11,9 +11,7 @@
     - name: exec gemini analyze
       ansible.builtin.shell: |
         export GEMINI_API_KEY={{ lookup('ansible.builtin.env', 'common_api_key') }}
-        # uv run python log_analyzer.py {{ transaction_dir }}
-        echo {{ transaction_dir }}
-        uv run python list_models.py
+        uv run python log_analyzer.py {{ transaction_dir }}
       args:
         chdir: "{{ base_dir }}"
       register: ret_analyze
@@ -26,3 +24,10 @@
     - ansible.builtin.debug: var=ret_analyze.stdout
     - ansible.builtin.debug: var=ret_tree.stdout
 
+    - ansible.builtin.set_stats:
+        data:
+          analyze_result: "{{ ret_analyze.stdout }}"
+
+    - ansible.builtin.set_stats:
+        data:
+          analyze_target_files: "{{ ret_tree.stdout }}"
