@@ -10,10 +10,9 @@
   tasks:
     - name: リモート側でファイルを tar.gz に固める
       community.general.archive:
-        path: "."
+        path: "{{ remote_src_dir }}/*"
         dest: "{{ remote_archive }}"
         format: gz
-        working_dir: "{{ remote_src_dir }}"
 
     - name: ローカルの保存先ディレクトリを作成
       ansible.builtin.file:
