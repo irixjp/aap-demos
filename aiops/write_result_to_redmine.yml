@@ -52,7 +52,7 @@
   - debug: var=ticket_id
 
   - uri:
-      url: "{{ redmine_server_url + 'issues/' }}{{ ticket_id | string }}.json"
+      url: "{{ redmine_server_url + '/issues/' }}{{ ticket_id | string }}.json"
       method: PUT
       validate_certs: false
       headers:
