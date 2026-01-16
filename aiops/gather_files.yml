@@ -2,7 +2,10 @@
 - name: ファイルとディレクトリを集約
   hosts: "{{ target_node }}"
   vars:
-    linux_files: []
+    linux_files:
+      - /etc/hosts
+      - /etc/ssh/sshd_config
+      - /var/log/nginx
     export_dir: "/tmp/exports/{{ transaction_id }}"
 
   tasks:
@@ -10,6 +13,14 @@
       ansible.builtin.file:
         path: "{{ export_dir }}"
         state: directory
+
+    - name: コピー先の親ディレクトリを動的に作成
+      ansible.builtin.file:
+        path: "{{ export_dir }}{{ item | dirname }}"
+        state: directory
+        recurse: yes
+      loop: "{{ linux_files }}"
+
 
     - name: ホスト内コピーを実行 (rsync)
       ansible.posix.synchronize:
