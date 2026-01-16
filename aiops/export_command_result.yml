@@ -2,11 +2,7 @@
 - hosts: "{{ target_node }}"
   gather_facts: false
   vars:
-    linux_commands:
-      - journalctl -p err -n 10
-      - ps -ef
-      - free -h
-      - df -h
+    linux_commands: []
     export_dir: "/tmp/exports/{{ transaction_id }}"
   tasks:
     - name: 出力先ディレクトリを作成
