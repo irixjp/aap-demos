@@ -2,10 +2,7 @@
 - name: ファイルとディレクトリを集約
   hosts: "{{ target_node }}"
   vars:
-    linux_files:
-      - /etc/hosts
-      - /etc/ssh/sshd_config
-      - /var/log/nginx
+    linux_files: []
     export_dir: "/tmp/exports/{{ transaction_id }}"
 
   tasks:
